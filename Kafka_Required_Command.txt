@@ -1,0 +1,48 @@
+-------------------------------
+Start Zookeeper & Kafka server
+-------------------------------
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+--------
+Topic
+--------
+.\bin\windows\kafka-topics.bat --create   --topic myTopic --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+.\bin\windows\kafka-topics.bat --delete   --topic myTopic --bootstrap-server localhost:9092
+.\bin\windows\kafka-topics.bat --alter    --topic myTopic --bootstrap-server localhost:9092 --partitions 5 --replication-factor 2
+.\bin\windows\kafka-topics.bat --delete   --topic myTopic --zookeeper localhost:2181  
+.\bin\windows\kafka-topics.bat --list     --topic myTopic --bootstrap-server localhost:9092 
+.\bin\windows\kafka-topics.bat --describe --topic myTopic --bootstrap-server localhost:9092
+
+
+----------
+Producer
+----------
+.\bin\windows\kafka-console-producer.bat --topic myTopic --bootstrap-server localhost:9092
+
+-----------
+Consumer
+-----------
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic myTopic --group new-consumer-group
+.\bin\windows\kafka-console-consumer.bat --topic myTopic --bootstrap-server localhost:9092 --from-beginning
+.\bin\windows\kafka-console-consumer.bat --topic myTopic --bootstrap-server localhost:9092 --from-beginning --max-messages 10
+
+----------------
+Consumer Group
+----------------
+.\bin\windows\kafka-consumer-groups.bat --list 	   --bootstrap-server localhost:9092 
+.\bin\windows\kafka-consumer-groups.bat --describe --bootstrap-server localhost:9092 --group new-consumer-group
+.\bin\windows\kafka-consumer-groups.bat --delete   --bootstrap-server localhost:9092 --group new-consumer-group 
+
+----------------
+
+----------------
+.\bin\windows\kafka-run-class.bat kafka.tools.GetOffsetShell --topic myTopic --bootstrap-server localhost:9092 --time -1
+
+----------------------------------------------------------------------------------------------------------------------------
+Notes :: 
+	Consumer group - You do not explicitly create consumer groups but rather build consumers which always belong to a consumer group. 
+					 No matter which technology (Spark, Spring, Flink, ...) you are using, each Kafka Consumer will have a Consumer Group. 
+					 The consumer group is configurable for each individual consumer.
+					 
+					 
